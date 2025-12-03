@@ -1,3 +1,5 @@
+from math import log
+
 with open('entrada.txt', 'r') as f:
 	intervalos = [
 		[int(i) for i in s.split('-')]
@@ -8,12 +10,11 @@ with open('entrada.txt', 'r') as f:
 soma_invalidos = 0
 for intervalo in intervalos:
 	for i in range(intervalo[0], intervalo[1] + 1):
-		id_str = str(i)
-		tamanho = len(id_str)
-		if (
-		(tamanho % 2 != 0) or
-		id_str[0:tamanho // 2] != id_str[tamanho // 2: tamanho]
-		):
+		tamanho = int(log(i, 10)) + 1
+		if (tamanho % 2) != 0:
+			continue
+		mascara = 10 ** (tamanho // 2)
+		if (i // mascara != i % mascara):
 			continue
 		soma_invalidos += i
 print(soma_invalidos)
