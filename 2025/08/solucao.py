@@ -67,19 +67,16 @@ def get_distancias_ordenadas(pontos):
     return sorted(distancias)
             
 
-def conectar_circuitos(distancias_ordenadas: list, quant_conexoes: int) -> int:
-    for dist, ponto_1, ponto_2 in distancias_ordenadas:
-        quant_conexoes -= 1
-        if ponto_1 in ponto_2.circuito:
-            continue
-        for ponto in ponto_2.circuito:
-            ponto_1.circuito.add(ponto)
-        #aqui eh passada a referencia!
-        for ponto in ponto_1.circuito:
-            ponto.circuito = ponto_1.circuito
-        if quant_conexoes == 0:
-            break
-    return 0 
+def conectar_circuitos(ponto_1, ponto_2) -> int:
+    if ponto_1 in ponto_2.circuito:
+        return ponto_1.circuito
+
+    for ponto in ponto_2.circuito:
+        ponto_1.circuito.add(ponto)
+    for ponto in ponto_1.circuito:
+        ponto.circuito = ponto_1.circuito
+
+    return ponto_1.circuito
  
 
 def get_todos_circuitos(pontos):
@@ -102,10 +99,10 @@ if __name__ == '__main__':
 
 
     distancias = get_distancias_ordenadas(pontos)
-    conectar_circuitos(distancias, 1000)
-    circuitos = get_todos_circuitos(pontos)
-
-    total = 1
-    for i in range(3):
-        total *= len(circuitos[i])
-    print(total)
+    for _, ponto_1, ponto_2 in distancias:
+        circuito = conectar_circuitos(ponto_1, ponto_2)
+        circuitos = get_todos_circuitos(pontos)
+        if len(circuitos) == 1:
+            print(ponto_1.x * ponto_2.x)
+            break
+       
