@@ -89,6 +89,25 @@ def get_todos_circuitos(pontos):
         pontos_circuitos |= ponto.circuito
     return sorted(circuitos, key=len, reverse=True)
 
+def solucao_1():
+    distancias = get_distancias_ordenadas(pontos)
+    for i in range(1000):
+        _, ponto_1, ponto_2 = distancias[i]
+        conectar_circuitos(ponto_1, ponto_2)
+    circuitos = get_todos_circuitos(pontos)
+    total = 1
+    for i in range(3):
+        total *= len(circuitos[i])
+    return total
+
+def solucao_2():
+    distancias = get_distancias_ordenadas(pontos)
+    for _, ponto_1, ponto_2 in distancias:
+        circuito = conectar_circuitos(ponto_1, ponto_2)
+        circuitos = get_todos_circuitos(pontos)
+        if len(circuitos) == 1:
+            return (ponto_1.x * ponto_2.x)
+ 
 
 if __name__ == '__main__':
     with open('entrada.txt', 'r') as f:
@@ -96,13 +115,8 @@ if __name__ == '__main__':
         pontos = []
         for l in entrada:
             pontos.append(Ponto(*(int(i) for i in l.split(','))))
+        print(solucao_1())
+        print(solucao_2())
 
 
-    distancias = get_distancias_ordenadas(pontos)
-    for _, ponto_1, ponto_2 in distancias:
-        circuito = conectar_circuitos(ponto_1, ponto_2)
-        circuitos = get_todos_circuitos(pontos)
-        if len(circuitos) == 1:
-            print(ponto_1.x * ponto_2.x)
-            break
-       
+      
